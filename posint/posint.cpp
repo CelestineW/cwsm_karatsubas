@@ -304,11 +304,24 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
   // Recursive Call
   else{
 
+        // Splitting terms
         int halves = len / 2;
         
+        //Psuedo-code - python esque
+        
+        // x_high = x.digits[0, halves]
+        // x_low = x.digits[halves, len]
+        // y_high = y.digits[0, halves]
+        // y_low = y.digits[halves, len]
 
+        // First recursive call
+        // u = karatsuba( (x_low + x_high), (y_low + y_high))
+        // w = karatsuba(x_low, y_low);
+        // r = karatsuba(x_high, y_high);
 
+        // prod = r * B ^ len + (u-r-w) * B ^ halves + w
 
+        // return prod;
   }
   
 
