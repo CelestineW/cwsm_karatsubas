@@ -12,8 +12,9 @@ int main() {
   // space-efficient to use the default, but then the
   // numbers will print in binary.
   
-  PosInt::setBase(16,3);
-  
+  //PosInt::setBase(16,3);
+ 
+  PosInt::setBase(10,1);
   // PosInt::setBase(10, 4);
 
   // x = 2^128

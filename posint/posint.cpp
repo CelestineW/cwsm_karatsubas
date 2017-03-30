@@ -295,6 +295,24 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
 
   // Karatsuba's method goes here
 
+  // Base Case
+  if ( len == 1 ){
+        
+        return mulArray(dest, x, len, y, len);
+  }
+
+  // Recursive Call
+  else{
+
+        int halves = len / 2;
+        
+
+
+
+  }
+  
+
+
 }
 
 // this = this * x
