@@ -278,6 +278,7 @@ void PosInt::sub (const PosInt& x) {
 void PosInt::mulArray 
   (int* dest, const int* x, int xlen, const int* y, int ylen) 
 {
+  cout << "in mulArray" << endl;
   for (int i=0; i<xlen+ylen; ++i) dest[i] = 0;
   for (int i=0; i<xlen; ++i) {
     for (int j=0; j<ylen; ++j) {
@@ -293,28 +294,115 @@ void PosInt::mulArray
 // dest must have size (2*len) to store the result.
 void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
 
+  cout << "In fastMulArray.." << endl;
+
   // Karatsuba's method goes here
 
   // Base Case
   if ( len == 1 ){
-        
-        return mulArray(dest, x, len, y, len);
+/*
+        cout << "Base Case" << endl;
+        cout << "Dest: " << &dest << endl;
+        cout << "x: " << &x << endl;
+        cout << "y: " << &y << endl;
+        cout << "len: " << len << endl;
+*/
+        return  mulArray( dest , x , len , y , len);
+       
   }
 
   // Recursive Call
   else{
-
+        cout << "Else statement" << endl;
+        
         // Splitting terms
         int halves = len / 2;
         
         //Psuedo-code - python esque
         
-        // x_high = x.digits[0, halves]
-        // x_low = x.digits[halves, len]
-        // y_high = y.digits[0, halves]
-        // y_low = y.digits[halves, len]
+        int * x_high = new int[halves];
+        int * x_low = new int[len - halves];
+        
+        int high_i = 0;
+        int low_i = 0;
+        for (int i = len - 1 ; i >= 0 ; --i){
+                
+                if (i > halves) {
+                        x_high[high_i] = x[i];
+                        high_i++;
+                }
+                else{
+                        x_low[low_i] = x[i];
+                        low_i++;
+                }
+        }
+/*
 
-        // First recursive call
+        cout << "X_HIGH" << endl;
+        for (int i = 0 ; i < halves ; i++){
+                cout << x_high[i];
+        }
+
+        cout << endl;
+
+        cout << "X_LOW" << endl;
+        for (int i = 0 ; i < len - halves ; i++){
+                cout << x_low[i];
+        }
+
+        cout << endl;
+*/
+
+        int * y_high = new int[halves];
+        int * y_low = new int[len - halves];
+         
+        high_i = 0;
+        low_i = 0;
+        
+        for (int i = len - 1 ; i >= 0 ; --i){
+                
+                if (i > halves) {
+                        y_high[high_i] = y[i];
+                        high_i++;
+                }
+                else{
+                        y_low[low_i] = y[i];
+                        low_i++;
+                }
+        }
+/*      
+        cout << "Y_HIGH" << endl;
+        for (int i = 0 ; i < halves ; i++){
+                cout << y_high[i];
+        }
+
+        cout << endl;
+ 
+        cout << "Y_LOW" << endl;
+        for (int i = 0 ; i < len - halves ; i++){
+                cout << y_low[i];
+        }
+
+        cout << endl;
+*/   
+        
+        //void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
+        // First recursive call - Highs
+        
+        int * a = new int[len];
+        
+        fastMulArray(a, x_high, y_high, halves);
+
+        int * d = new int[len];
+
+        fastMulArray(d, x_low, y_low, len-halves);
+
+        int * e = new int[len];
+
+        //fastMulArray(e,
+        
+        //addArray (&digits[0], &x.digits[0], x.digits.size());
+
         // u = karatsuba( (x_low + x_high), (y_low + y_high))
         // w = karatsuba(x_low, y_low);
         // r = karatsuba(x_high, y_high);
@@ -355,7 +443,21 @@ void PosInt::mul(const PosInt& x) {
 // this = this * x, using Karatsuba's method
 void PosInt::fastMul(const PosInt& x) {
 
-  // Set-up and call to fastMulArray() goes here
+        cout << "In fastMul " << endl;
+        
+        cout << "x length " << x.digits.size();
+        cout << "this length " << digits.size();
+/*
+        cout << "x digits " ;
+        x.print_array(cout);
+        cout << endl;
+*/
+        
+        int* dest = new int[x.digits.size() * 2]; 
+
+        fastMulArray(dest, &x.digits[0] , &digits[0], digits.size());
+        
+        cout<< "Dest: " << *dest << endl;
 
 }
 

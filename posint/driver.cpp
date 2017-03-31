@@ -17,6 +17,12 @@ int main() {
   PosInt::setBase(10,1);
   // PosInt::setBase(10, 4);
 
+  PosInt b(12349);
+  PosInt a(56780);
+
+  a.fastMul(b);
+/*
+  cout << " ------- Marron's Tests  ---- " << endl;
   // x = 2^128
   PosInt x(2);
   PosInt y(128);
@@ -47,5 +53,6 @@ int main() {
   z.mod(x);
 
   cout << "z^2 mod x = " << z << endl;
+*/
 }
   
