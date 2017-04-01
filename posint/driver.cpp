@@ -17,8 +17,12 @@ int main() {
   PosInt::setBase(10,1);
   // PosInt::setBase(10, 4);
 
-  PosInt b(12349);
-  PosInt a(56780);
+  PosInt a(1234);
+  PosInt b(6789);
+
+//  PosInt a(12);
+//  PosInt b(67);
+
 
   a.fastMul(b);
 /*
