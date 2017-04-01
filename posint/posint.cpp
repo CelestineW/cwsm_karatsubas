@@ -294,12 +294,13 @@ void PosInt::mulArray
 // dest must have size (2*len) to store the result.
 void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
 
-  cout << "In fastMulArray.." << endl;
 
   // Karatsuba's method goes here
 
   // Base Case
   if ( len == 1 ){
+        
+        cout << "Base Case.." << endl;
 /*
         cout << "Base Case" << endl;
         cout << "Dest: " << &dest << endl;
@@ -307,6 +308,9 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
         cout << "y: " << &y << endl;
         cout << "len: " << len << endl;
 */
+        cout << "x: " << *x << endl;
+        cout << "y: " << *y << endl;
+
         return  mulArray( dest , x , len , y , len);
        
   }
@@ -314,8 +318,6 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
   // Recursive Call
   else{
         cout << "Else statement" << endl;
-        cout << "X : " << *x << endl;
-        cout << "Y : " << *y << endl;
 
         // Splitting terms
         int halves = len / 2;
@@ -329,7 +331,6 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
         int low_i = 0;
         for (int i = len - 1; i >= 0; i--){
 
-
                 if (i >= halves) {
                         x_high[high_i] = x[i];
                         high_i++;
@@ -339,7 +340,7 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
                         low_i++;
                 }
         }
-
+/*
         cout << "X_HIGH" << endl;
         for (int i = 0 ; i < halves ; i++){
                 cout << x_high[i];
@@ -353,7 +354,7 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
         }
 
         cout << endl;
-
+*/
         int * y_high = new int[halves];
         int * y_low = new int[len - halves];
          
@@ -362,7 +363,6 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
         
         for (int i = len - 1 ; i >= 0 ; i--){
                 
-                cout << " Y in loop : " << i << "   " << * ( y + i) << endl;
                 if (i >= halves) {
                         y_high[high_i] = * ( y + i);
                         high_i++;
@@ -372,7 +372,7 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
                         low_i++;
                 }
         }
-
+/*
         cout << "Y_HIGH" << endl;
         for (int i = 0 ; i < halves ; i++){
                 cout << y_high[i];
@@ -386,7 +386,8 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
         }
 
         cout << endl;
-        
+*/
+
         //void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
         // First recursive call - Highs
         
@@ -403,19 +404,20 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
         int * e = new int[len];
 
         addArray(x_low, x_high, halves);
-        cout << "X LOW: " << *x_low << endl;
+        cout << "E - X LOW: " << *x_low << endl;
 
         addArray(y_low, y_high, halves);
-        cout << "Y LOW: " << *y_low << endl;
+        cout << "E - Y LOW: " << *y_low << endl;
 
         fastMulArray(e, x_low, y_low, halves); 
         cout << "E : " << *e << endl;
+        cout << "E2: " << *++e << endl;
 
         //addArray (&digits[0], &x.digits[0], x.digits.size());
 
-        // u = karatsuba( (x_low + x_high), (y_low + y_high))
-        // w = karatsuba(x_low, y_low);
         // r = karatsuba(x_high, y_high);
+        // w = karatsuba(x_low, y_low);
+        // u = karatsuba( (x_low + x_high), (y_low + y_high))
 
         // prod = r * B ^ len + (u-r-w) * B ^ halves + w
 
