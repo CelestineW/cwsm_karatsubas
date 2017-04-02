@@ -317,109 +317,159 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
 
   // Recursive Call
   else{
+       
         cout << "Else statement" << endl;
+
 
         // Splitting terms
         int halves = len / 2;
         
         //Psuedo-code - python esque
-        
-        int * x_high = new int[halves];
-        int * x_low = new int[len - halves];
-        
+       
+
+        int * x_high = new int[len];
+        int * x_low = new int[len];
+       
+
         int high_i = 0;
         int low_i = 0;
-        for (int i = len - 1; i >= 0; i--){
-
-                if (i >= halves) {
-                        x_high[high_i] = x[i];
-                        high_i++;
+        
+        for (int i  = 0 ; i < len ; i++ ){
+                if (i < halves) {
+                        x_low[low_i] = x[i];
+                        low_i ++;
                 }
                 else{
-                        x_low[low_i] = x[i];
-                        low_i++;
+                        x_high[high_i] = x[i];
+                        high_i ++;
                 }
         }
-/*
-        cout << "X_HIGH" << endl;
-        for (int i = 0 ; i < halves ; i++){
+
+
+        for (int i = high_i; i < len; i++){
+                x_high[high_i] = 0;
+        }
+        for (int i = low_i; i < len; i++){
+                x_low[low_i] = 0 ;
+        }
+
+        cout << "X_HIGH ";
+        for (int i = 0 ; i < len ; i++){
                 cout << x_high[i];
         }
 
         cout << endl;
 
-        cout << "X_LOW" << endl;
-        for (int i = 0 ; i < len - halves ; i++){
+        cout << "X_LOW " ;
+        for (int i = 0 ; i < len ; i++){
                 cout << x_low[i];
         }
 
         cout << endl;
-*/
-        int * y_high = new int[halves];
-        int * y_low = new int[len - halves];
+
+        int * y_high = new int[len];
+        int * y_low = new int[len];
          
         high_i = 0;
         low_i = 0;
         
-        for (int i = len - 1 ; i >= 0 ; i--){
-                
-                if (i >= halves) {
-                        y_high[high_i] = * ( y + i);
-                        high_i++;
+        for (int i  = 0 ; i < len ; i++ ){
+
+                if (i < halves) {
+                        y_low[low_i] = y[i];
+                        low_i ++;
                 }
                 else{
-                        y_low[low_i] = * (y + i);
-                        low_i++;
+                        y_high[high_i] = y[i];
+                        high_i ++;
                 }
         }
-/*
-        cout << "Y_HIGH" << endl;
-        for (int i = 0 ; i < halves ; i++){
+  
+        for (int i = high_i; i < len; i ++){
+                y_high[high_i] = 0;
+        }
+
+        for (int i = low_i; i < len; i ++){
+                y_low[low_i] = 0; 
+        }
+
+        cout << "Y_HIGH ";
+        for (int i = 0 ; i < len; i++){
                 cout << y_high[i];
         }
 
         cout << endl;
  
-        cout << "Y_LOW" << endl;
-        for (int i = 0 ; i < len - halves ; i++){
+        cout << "Y_LOW ";
+        for (int i = 0 ; i < len; i++){
                 cout << y_low[i];
         }
 
         cout << endl;
-*/
 
         //void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
         // First recursive call - Highs
-        
+       
+        cout << " --- Start --- " << endl;
         int * a = new int[len];
-        
+
         fastMulArray(a, x_high, y_high, halves);
-        cout << "A : " << *a << endl;
+
+        cout << "A: ";
+        for (int i = 0 ; i < len; i++){
+                cout << a[i];
+        }
+        cout << endl;
 
         int * d = new int[len];
 
         fastMulArray(d, x_low, y_low, len-halves);
-        cout << "D : " << *d << endl;
-
+        cout << "D: ";
+        for (int i = 0 ; i < len; i++){
+                cout << d[i];
+        }
+        cout << endl;
         int * e = new int[len];
 
-        addArray(x_low, x_high, halves);
-        cout << "E - X LOW: " << *x_low << endl;
+        addArray(x_low, x_high, len);
+        cout << "E arg 1: ";
+        for (int i = 0 ; i < len; i++){
+                cout << x_low[i];
+        }
+        cout << endl;
 
-        addArray(y_low, y_high, halves);
-        cout << "E - Y LOW: " << *y_low << endl;
 
-        fastMulArray(e, x_low, y_low, halves); 
-        cout << "E : " << *e << endl;
-        cout << "E2: " << *++e << endl;
+
+        addArray(y_low, y_high, len);
+        cout << "E arg2: ";
+        for (int i = 0 ; i < len; i++){
+                cout << y_low[i];
+        }
+        cout << endl;
+
+        if(x_low[low_i] != 0 || y_low[low_i] != 0){
+                fastMulArray(e, x_low, y_low, len); 
+        }
+
+        else{
+                fastMulArray(e, x_low, y_low, halves); 
+        }
+        cout << "E: ";
+        for (int i = 0 ; i < len; i++){
+                cout << e[i];
+        }
+        cout << endl;
+        
+        cout << "-- Finished -- " << endl;
+        
 
         //addArray (&digits[0], &x.digits[0], x.digits.size());
 
-        // r = karatsuba(x_high, y_high);
-        // w = karatsuba(x_low, y_low);
-        // u = karatsuba( (x_low + x_high), (y_low + y_high))
+        // a = karatsuba(x_high, y_high);
+        // d = karatsuba(x_low, y_low);
+        // e = karatsuba( (x_low + x_high), (y_low + y_high))
 
-        // prod = r * B ^ len + (u-r-w) * B ^ halves + w
+        // prod = a * B ^ len + (e-a-d) * B ^ halves + d
 
         // return prod;
   }
@@ -460,10 +510,12 @@ void PosInt::fastMul(const PosInt& x) {
         cout << "x digits " ;
         x.print_array(cout);
         cout << endl;
-        
-        cout << "x digits " ;
+        cout << "x - size : " << x.digits.size() << endl;
+
+        cout << "y digits " ;
         this->print_array(cout);
         cout << endl;
+        cout << "this - size : " << digits.size() << endl;
         
 
 

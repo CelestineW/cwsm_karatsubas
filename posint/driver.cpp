@@ -20,8 +20,8 @@ int main() {
   //PosInt a(1234);
   //PosInt b(4321);
 
-  PosInt a(12);
-  PosInt b(67);
+  PosInt b(1234);
+  PosInt a(6789);
 
 
   a.fastMul(b);
