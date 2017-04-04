@@ -242,6 +242,21 @@ void PosInt::add (const PosInt& x) {
 // Computes dest -= x, digit-wise
 // REQUIREMENT: dest >= x, so the difference is non-negative
 void PosInt::subArray (int* dest, const int* x, int len) {
+
+  cout << "SUBTRACTION" << endl;
+  cout << "dest: ";
+  for (int i = 0; i < len ; i ++ ){
+        cout << dest[i];
+  }
+  cout << endl;
+
+  cout << "sub - x : ";
+  for (int i = 0; i < len ; i ++ ){
+        cout << x[i];
+  }
+  cout << endl;
+
+
   int i = 0;
   for ( ; i < len; ++i)
     dest[i] -= x[i];
@@ -257,6 +272,8 @@ void PosInt::subArray (int* dest, const int* x, int len) {
     dest[i] += B;
     --dest[i+1];
   }
+
+  cout << "sub- Dest : " << *dest << endl;
 }
 
 // this = this - x
@@ -278,7 +295,6 @@ void PosInt::sub (const PosInt& x) {
 void PosInt::mulArray 
   (int* dest, const int* x, int xlen, const int* y, int ylen) 
 {
-  cout << "in mulArray" << endl;
   for (int i=0; i<xlen+ylen; ++i) dest[i] = 0;
   for (int i=0; i<xlen; ++i) {
     for (int j=0; j<ylen; ++j) {
@@ -299,27 +315,21 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
 
   // Base Case
   if ( len == 1 ){
-        
-        cout << "Base Case.." << endl;
-/*
-        cout << "Base Case" << endl;
-        cout << "Dest: " << &dest << endl;
-        cout << "x: " << &x << endl;
-        cout << "y: " << &y << endl;
-        cout << "len: " << len << endl;
-*/
-        cout << "x: " << *x << endl;
-        cout << "y: " << *y << endl;
-
-        return  mulArray( dest , x , len , y , len);
+       
+        cout << "Base Case: " << *x << " * " << *y << endl;
+        mulArray( dest , x , len , y , len);
        
   }
 
   // Recursive Call
   else{
-       
-        cout << "Else statement" << endl;
 
+        cout << "Non Base Case: " << endl;
+        for (int i = 0; i < len; i ++ ){
+                cout << "\t X : " << i << "  " << *( x + i) << endl; 
+                
+        }
+        cout << endl;
 
         // Splitting terms
         int halves = len / 2;
@@ -327,8 +337,8 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
         //Psuedo-code - python esque
        
 
-        int * x_high = new int[len];
-        int * x_low = new int[len];
+        int * x_high = new int[len * 2];
+        int * x_low = new int[len * 2];
        
 
         int high_i = 0;
@@ -353,22 +363,8 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
                 x_low[low_i] = 0 ;
         }
 
-        cout << "X_HIGH ";
-        for (int i = 0 ; i < len ; i++){
-                cout << x_high[i];
-        }
-
-        cout << endl;
-
-        cout << "X_LOW " ;
-        for (int i = 0 ; i < len ; i++){
-                cout << x_low[i];
-        }
-
-        cout << endl;
-
-        int * y_high = new int[len];
-        int * y_low = new int[len];
+        int * y_high = new int[len * 2];
+        int * y_low = new int[len * 2];
          
         high_i = 0;
         low_i = 0;
@@ -393,78 +389,151 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
                 y_low[low_i] = 0; 
         }
 
-        cout << "Y_HIGH ";
-        for (int i = 0 ; i < len; i++){
-                cout << y_high[i];
-        }
 
-        cout << endl;
- 
-        cout << "Y_LOW ";
-        for (int i = 0 ; i < len; i++){
-                cout << y_low[i];
-        }
-
-        cout << endl;
-
-        //void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
         // First recursive call - Highs
        
-        cout << " --- Start --- " << endl;
-        int * a = new int[len];
+        int * a = new int[len * 2];
+ 
+        for (int i = 0 ; i < len * 2; i++){
+                a[i] = 0;
+        }
 
         fastMulArray(a, x_high, y_high, halves);
 
         cout << "A: ";
-        for (int i = 0 ; i < len; i++){
+        for (int i = 0 ; i < len * 2; i++){
                 cout << a[i];
         }
         cout << endl;
 
-        int * d = new int[len];
 
-        fastMulArray(d, x_low, y_low, len-halves);
+        
+
+        int * d = new int[len * 2];
+  
+        for (int i = 0 ; i < len * 2; i++){
+                d[i] = 0;
+        }
+
+        fastMulArray(d, x_low, y_low, halves);
+ 
         cout << "D: ";
-        for (int i = 0 ; i < len; i++){
+        for (int i = 0 ; i < len * 2; i++){
                 cout << d[i];
         }
         cout << endl;
-        int * e = new int[len];
 
-        addArray(x_low, x_high, len);
+       
+
+        int * e = new int[len * 2];
+         
+        for (int i = 0 ; i < len * 2; i++){
+                e[i] = 0;
+        }
+
+        addArray(x_low, x_high, len * 2);
+
         cout << "E arg 1: ";
-        for (int i = 0 ; i < len; i++){
+        for (int i = 0 ; i < len * 2; i++){
                 cout << x_low[i];
         }
         cout << endl;
 
+        addArray(y_low, y_high, len * 2);
 
-
-        addArray(y_low, y_high, len);
         cout << "E arg2: ";
-        for (int i = 0 ; i < len; i++){
+        for (int i = 0 ; i < len * 2; i++){
                 cout << y_low[i];
         }
         cout << endl;
-
-        if(x_low[low_i] != 0 || y_low[low_i] != 0){
+        
+        if ( x_low[len-1] != 0 || y_low[len-1] != 0){
                 fastMulArray(e, x_low, y_low, len); 
         }
-
         else{
                 fastMulArray(e, x_low, y_low, halves); 
         }
+        cout << " E : ";
+ 
+        for (int i = 0 ; i < len * 2; i++){
+                cout << e[i];
+        }
+        cout << endl;
+
+       
+        int base_len = B;
+        
+        for (int i = 1; i < len ; i ++ ){
+                base_len *= B; 
+        }
+        
+        int base_half = B;
+
+        for (int i = 1; i < halves ; i ++ ){
+                base_half *= B;
+        }
+/*
+        cout << "B ^ len :" << base_len << endl;
+        cout << "B ^ half : " << base_half << endl;
         cout << "E: ";
         for (int i = 0 ; i < len; i++){
                 cout << e[i];
         }
         cout << endl;
-        
+*/
+
+        subArray(e, a, len*2);
+        subArray(e, d, len*2);
+
+        cout << "A: ";
+        for (int i = 0 ; i < len * 2; i++){
+                cout << a[i];
+        }
+        cout << endl;
+
+        cout << "D: ";
+        for (int i = 0 ; i < len * 2; i++){
+                cout << d[i];
+        }
+        cout << endl;
+
+        cout << "E: ";
+        for (int i = 0 ; i < len * 2; i++){
+                cout << e[i];
+        }
+        cout << endl;
+
+        mulDigit(a, base_len, len * 2);
+        mulDigit(e, base_half, len * 2);
+        cout << "Multiplied: " << endl;
+
+        cout << "A: ";
+        for (int i = 0 ; i < len*2; i++){
+                cout << a[i];
+        }
+        cout << endl;
+
+        cout << "D: ";
+        for (int i = 0 ; i < len * 2; i++){
+                cout << d[i];
+        }
+        cout << endl;
+
+        cout << "E: ";
+        for (int i = 0 ; i < len * 2; i++){
+                cout << e[i];
+        }
+        cout << endl;
+       
+        addArray(dest, a, len * 2);
+        addArray(dest, e, len * 2);
+        addArray(dest, d, len * 2);
+/*
+        cout << "Returning: " << *dest << endl;
+        cout << "Returning: " << *( dest+ 1 )  << endl;
+
         cout << "-- Finished -- " << endl;
-        
-
-        //addArray (&digits[0], &x.digits[0], x.digits.size());
-
+  */      
         // a = karatsuba(x_high, y_high);
         // d = karatsuba(x_low, y_low);
         // e = karatsuba( (x_low + x_high), (y_low + y_high))
@@ -520,12 +589,21 @@ void PosInt::fastMul(const PosInt& x) {
 
 
         int* dest = new int[x.digits.size() * 2]; 
+        
+        for ( int i = 0; i < x.digits.size() * 2; i ++){
+                dest[i] = 0;
+
+        }
 
         //void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
         fastMulArray(dest, &x.digits[0] , &digits[0], digits.size());
         
-        cout<< "Dest: " << *dest << endl;
+        cout<< "Dest: ";
+        for ( int i = 0 ; i < x.digits.size()*2 ; i ++){
 
+                cout << *(dest+i);
+        }
+        cout << endl;
 }
 
 /******************** DIVISION ********************/
