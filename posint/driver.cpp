@@ -12,18 +12,16 @@ int main() {
   // space-efficient to use the default, but then the
   // numbers will print in binary.
   
-  //PosInt::setBase(16,3);
- 
-  PosInt::setBase(10,1);
-  // PosInt::setBase(10, 4);
+  PosInt::setBase(16,3);
+  
+  PosInt::setBase(10,2);
 
-  PosInt a(1234);
-  PosInt b(4321);
+  PosInt a(123456789);
+  PosInt b(123456789);
 
 
   a.fastMul(b);
 /*
-  cout << " ------- Marron's Tests  ---- " << endl;
   // x = 2^128
   PosInt x(2);
   PosInt y(128);
