@@ -302,9 +302,10 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
 
   // Karatsuba's method goes here
 
-  // Base Case
+  // Base Case - when lengths are = 1
   if ( len == 1 ){
-       
+      
+        // Calls mullArray with single digit numbers
         mulArray( dest , x , len , y , len);
        
   }
@@ -312,15 +313,19 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
   // Recursive Call
   else{
         
-        // Splitting terms
+        // Splitting terms in half
         int halves = len / 2;
         
+        // Creating int arrays with len * 2
+        // for space to add the two terms later
         int * x_high = new int[len * 2];
         int * x_low = new int[len * 2];
        
         int high_i = 0;
         int low_i = 0;
         
+        // Copying over values of x into respective
+        // high and lows
         for (int i  = 0 ; i < len ; i++ ){
                 if (i < halves) {
                         x_low[low_i] = x[i];
@@ -333,6 +338,7 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
         }
 
 
+        // Padding x's with 0s
         for (int i = high_i; i < len; i++){
                 x_high[high_i] = 0;
         }
@@ -346,6 +352,7 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
         high_i = 0;
         low_i = 0;
         
+        // Copying over y values to high and lows
         for (int i  = 0 ; i < len ; i++ ){
 
                 if (i < halves) {
@@ -358,6 +365,7 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
                 }
         }
   
+        // Padding for zeros
         for (int i = high_i; i < len; i ++){
                 y_high[high_i] = 0;
         }
@@ -367,32 +375,44 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
 
 
         // First recursive call - Highs
-       
+        
+        // When a and e are multiplied 
+        // to the base, it can be at most
+        // len * 2 + 1 
         int * a = new int[len * 3];
         int * d = new int[len * 3];
         int * e = new int[len * 3];
 
+        // Setting to zeros, and padding
         for (int i = 0 ; i < len * 2; i++){
                 a[i] = 0;
                 d[i] = 0;
                 e[i] = 0;
         }
 
+        // Recursive calls for a and d
         fastMulArray(a, x_high, y_high, halves);
         fastMulArray(d, x_low, y_low, halves);
 
+        // Preparing values for recursive call for e
         addArray(x_low, x_high, len * 2);
         addArray(y_low, y_high, len * 2);
 
+        // When e can be two numbers of different
+        // digit sizes, we split and call according to
+        // the nearest power or 2 number
 	int e_len = len-1;
 	while( x_low[e_len] == 0 && y_low[e_len] == 0){
 		e_len--;
 	}
 	e_len = (e_len+1 > (len/2) )? len: halves;
 
-
+        // recursive call for e
         fastMulArray(e, x_low, y_low, e_len); 
 
+
+        // Base nultiplication for
+        // B ^ len and B ^ halves
         int base_len = B;        
         for (int i = 1; i < len ; i ++ ){
                 base_len *= B; 
@@ -403,12 +423,18 @@ void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
                 base_half *= B;
         }
 
+        // Math for prod=
+        // (a * B ^len) + ((e-a-d) * B ^ halves)+ d
+        
+        // (e-a-d) 
         subArray(e, a, len * 2);
         subArray(e, d, len * 2);        
 
+        // a and e multiplied to its base
         mulDigit(a, base_len, len * 2);
         mulDigit(e, base_half, len * 2);
-           
+        
+        // adding all to dest ptr
         addArray(dest, a, len * 2);
         addArray(dest, e, len * 2);
         addArray(dest, d, len * 2);
@@ -459,16 +485,20 @@ void PosInt::fastMul(const PosInt& x) {
 
 	cout << "clock start " << start << endl;
 
+
+        // For numbers with different digit amounts
         int length = max(digits.size(), x.digits.size());
 
+        // reserving space for large multiplication
         int* dest = new int[length * 2]; 
        
         // Padding
         for ( int i = 0; i < length * 2; i ++){
                 dest[i] = 0;
-
         }
 
+        // For powers of 2, finding and padding
+        // so each split will be an even number
         int digit_length = 2;
 
         for (int i = 0; i < length/2 ; i ++){
@@ -478,7 +508,7 @@ void PosInt::fastMul(const PosInt& x) {
         int * x_iarray = new int[digit_length];
         int * y_iarray = new int[digit_length];
 
-
+        // Copying over values and padding
         for (int i = 0 ; i < digit_length ; i++){
             if (i < x.digits.size() ){
                 x_iarray[i] = x.digits[i];
@@ -488,7 +518,7 @@ void PosInt::fastMul(const PosInt& x) {
             }
         }
 
-        
+        // Copying over values and padding
         for (int i = 0 ; i < digit_length ; i++){
             if (i < digits.size()) {
                 y_iarray[i] = this->digits[i];
@@ -498,6 +528,7 @@ void PosInt::fastMul(const PosInt& x) {
             }
         }
  
+        // Call to recursive function
         fastMulArray(dest, x_iarray, y_iarray, digit_length);
  
         cout << "Final Answer: " ;
